@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+data/*.csv
+data/*.parquet
+models/*.joblib
+models/*.json
+output/*.jsonl
+output/*.csv
+!**/.gitkeep
+.venv/
+.vscode/
