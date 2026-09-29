@@ -5,7 +5,9 @@ Dipakai supaya pipeline bisa langsung diuji TANPA mengunduh file PaySim 470MB.
 Untuk laporan/UTS, ganti dengan dataset PaySim asli dari Kaggle:
   https://www.kaggle.com/datasets/ealaxi/paysim1
 """
+import argparse
 import sys
+
 import numpy as np
 import pandas as pd
 
@@ -13,7 +15,7 @@ sys.path.append(str(__import__("pathlib").Path(__file__).resolve().parents[1]))
 from config import RAW_CSV
 from src.common import TRANSACTION_TYPES
 
-N_ROWS = 50_000
+N_ROWS = 250_000   # >= syarat tugas 200.000 baris
 FRAUD_RATE = 0.004
 SEED = 42
 
@@ -67,8 +69,17 @@ def make_sample(n_rows: int = N_ROWS, seed: int = SEED) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    df = make_sample()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--rows", type=int, default=N_ROWS,
+                    help=f"jumlah baris (default {N_ROWS:,}, syarat tugas min 200.000)")
+    args = ap.parse_args()
+
+    df = make_sample(n_rows=args.rows)
     df.to_csv(RAW_CSV, index=False)
     print(f"[OK] Data contoh dibuat: {RAW_CSV}")
     print(f"     {len(df):,} baris x {df.shape[1]} kolom | "
           f"fraud = {int(df.isFraud.sum()):,} ({df.isFraud.mean():.3%})")
+    print(f"     Syarat 200.000 baris: "
+          f"{'LOLOS' if len(df) >= 200_000 else 'TIDAK LOLOS'}")
+    print("     CATATAN: ini DATA CONTOH untuk menguji pipeline. Untuk laporan/UTS,")
+    print("              ganti dengan PaySim asli: https://www.kaggle.com/datasets/ealaxi/paysim1")

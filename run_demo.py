@@ -9,17 +9,19 @@ import subprocess
 import sys
 
 STEPS = [
-    ("0/4  Membuat data contoh mirip PaySim",
+    ("0/5  Membuat data contoh mirip PaySim",
      [sys.executable, "src/make_sample_data.py"]),
-    ("1/4  BATCH: cleaning + feature engineering + EDA",
+    ("1/5  BATCH: cleaning + feature engineering + EDA",
      [sys.executable, "src/prepare_batch.py"]),
-    ("2/4  BATCH: melatih model deteksi fraud",
+    ("2/5  BATCH: melatih model deteksi fraud",
      [sys.executable, "src/train_model.py"]),
-    ("3/4  STREAMING: membangkitkan 500 transaksi baru",
+    ("3/5  STREAMING: membangkitkan 500 transaksi baru",
      [sys.executable, "src/stream_producer.py", "--sink", "file",
       "--limit", "500", "--eps", "0", "--fraud-rate", "0.05"]),
-    ("4/4  STREAMING: scoring real-time memakai model batch",
+    ("4/5  STREAMING: scoring real-time memakai model batch",
      [sys.executable, "src/stream_consumer.py", "--source", "file"]),
+    ("5/5  SERVING: menggabungkan data batch + streaming jadi satu tabel",
+     [sys.executable, "src/combine.py"]),
 ]
 
 
@@ -31,7 +33,9 @@ def main() -> None:
         if subprocess.run(cmd).returncode != 0:
             sys.exit(f"[X] Gagal pada langkah: {title}")
     print("\n" + "=" * 72)
-    print("  SELESAI - lihat folder output/ untuk hasil EDA & scoring.")
+    print("  SELESAI")
+    print("  Hasil GABUNGAN batch+streaming: output/combined_batch_streaming.csv")
+    print("  Perbandingan kedua sumber      : output/combined_summary.csv")
     print("=" * 72)
 
 
