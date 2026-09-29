@@ -1,0 +1,3 @@
+source,jumlah_transaksi,fraud,rasio_fraud,rata_amount,median_amount,max_amount,step_min,step_max
+batch,250000,450,0.0018,10684.06422884,2968.59,3755178.88,1,743
+streaming,500,9,0.018,9124.83994,2903.1800000000003,189883.29,744,744
